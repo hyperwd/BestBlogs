@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  podcast-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: podcast-demo
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      # Dify相关配置 (请根据实际情况修改)
+      - DIFY_API_URL=${DIFY_API_URL:-https://api.dify.ai/v1}
+      - DIFY_API_KEY=${DIFY_API_KEY:-your-dify-api-key}
+      # RSS更新间隔 (分钟)
+      - RSS_UPDATE_INTERVAL=${RSS_UPDATE_INTERVAL:-30}
+      # 缓存过期时间 (分钟)
+      - CACHE_EXPIRY=${CACHE_EXPIRY:-10}
+    volumes:
+      # 持久化缓存数据
+      - podcast-cache:/app/cache
+      # 配置文件挂载 (可选)
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - podcast-network
+
+volumes:
+  podcast-cache:
+    driver: local
+
+networks:
+  podcast-network:
+    driver: bridge

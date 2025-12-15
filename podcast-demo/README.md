@@ -226,4 +226,123 @@ podcast-demo/
 4. **突发提醒**: 重大新闻实时推送提醒
 5. **灵活配置**: 现场添加新的媒体源进行演示
 
-这个演示平台完美展示了 AI + 播客技术的创新应用，适合向客户展示技术实力和产品概念。
+## 🐳 Docker 部署
+
+### 1. 使用 Docker Compose 一键部署（推荐）
+
+这是最简单快捷的部署方式：
+
+```bash
+# 克隆项目
+git clone <repository-url>
+cd podcast-demo
+
+# 配置环境变量
+cp .env.example .env
+# 编辑 .env 文件，填入实际的 Dify API 配置
+
+# 一键启动
+docker-compose up -d
+```
+
+访问应用：
+- 主界面: http://localhost:3000
+- 管理界面: http://localhost:3000/admin
+
+### 2. 手动 Docker 构建
+
+如果需要手动构建和运行：
+
+```bash
+# 构建镜像
+docker build -t podcast-demo .
+
+# 运行容器
+docker run -d \
+  --name podcast-demo \
+  -p 3000:3000 \
+  --env-file .env \
+  -v $(pwd)/config:/app/config:ro \
+  -v podcast-cache:/app/cache \
+  --restart unless-stopped \
+  podcast-demo
+```
+
+### 3. 生产环境配置
+
+#### 环境变量配置
+在生产环境中，请确保配置以下关键环境变量：
+
+```env
+# Dify API配置
+DIFY_API_URL=https://api.dify.ai/v1
+DIFY_API_KEY=your-production-api-key
+
+# 安全配置
+NODE_ENV=production
+HOSTNAME=0.0.0.0
+PORT=3000
+
+# 缓存配置
+RSS_UPDATE_INTERVAL=30
+CACHE_EXPIRY=10
+```
+
+#### 反向代理配置（Nginx示例）
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+### 4. 容器管理命令
+
+```bash
+# 查看容器状态
+docker-compose ps
+
+# 查看日志
+docker-compose logs -f podcast-demo
+
+# 重启服务
+docker-compose restart
+
+# 停止服务
+docker-compose down
+
+# 更新并重新部署
+docker-compose pull
+docker-compose up -d --force-recreate
+```
+
+### 5. 数据持久化
+
+- **缓存数据**: 自动存储在 Docker volume `podcast-cache` 中
+- **配置文件**: 通过 volume 挂载到 `/app/config`
+- **日志**: 容器内 `/app/logs` 目录
+
+### 6. 健康检查
+
+容器包含内置的健康检查，会定期检查应用状态：
+
+```bash
+# 查看健康状态
+docker inspect podcast-demo | grep Health -A 10
+```
+
+---
+
+这个演示平台完美展示了 AI + 播客技术的创新应用，支持 Docker 容器化部署，适合向客户展示技术实力和产品概念。
