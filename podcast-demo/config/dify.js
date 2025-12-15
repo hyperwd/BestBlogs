@@ -13,12 +13,12 @@ module.exports = {
     timeout: 30000, // 30秒超时
   },
 
-  // 工作流配置 (仅使用 Dify)
+  // 工作流配置 (多应用架构)
   workflows: {
-    // 音频转录工作流
+    // 音频转录工作流 (独立应用)
     transcription: {
       workflowId: getEnvVar('DIFY_TRANSCRIPTION_WORKFLOW_ID', 'transcription-workflow'),
-      apiKey: getEnvVar('DIFY_API_KEY'),
+      apiKey: getEnvVar('DIFY_TRANSCRIPTION_API_KEY'),
       inputs: {
         audio_file: '', // 音频文件路径
         language: 'auto', // 自动检测语言
@@ -28,12 +28,12 @@ module.exports = {
       timeout: 120000, // 2分钟超时，转录可能较慢
     },
 
-    // 文本翻译工作流 (使用现有的播客分析结果翻译工作流)
+    // 文本翻译工作流 (独立应用 - BestBlogs现有)
     translation: {
       workflowId: getEnvVar('DIFY_TRANSLATION_WORKFLOW_ID', '播客分析结果翻译'),
-      apiKey: getEnvVar('DIFY_API_KEY'),
+      apiKey: getEnvVar('DIFY_TRANSLATION_API_KEY'),
       inputs: {
-        content: '', // 待分析内容
+        content: '', // 待翻译内容
         language: 'auto', // 源语言自动检测
         target_language: 'zh-CN', // 目标语言中文
         translation_style: 'professional', // 专业翻译风格
@@ -41,10 +41,10 @@ module.exports = {
       timeout: 60000, // 1分钟超时
     },
 
-    // 内容分析工作流 (使用现有的播客分析流程工作流)
+    // 内容分析工作流 (独立应用 - BestBlogs现有)
     analysis: {
       workflowId: getEnvVar('DIFY_ANALYSIS_WORKFLOW_ID', '播客分析流程'),
-      apiKey: getEnvVar('DIFY_API_KEY'),
+      apiKey: getEnvVar('DIFY_ANALYSIS_API_KEY'),
       inputs: {
         content: '', // 待分析内容
         analysis_type: 'comprehensive', // 全面分析
@@ -56,10 +56,10 @@ module.exports = {
       timeout: 90000, // 1.5分钟超时
     },
 
-    // 文本转语音工作流 (需要您创建)
+    // 文本转语音工作流 (可选功能)
     tts: {
       workflowId: getEnvVar('DIFY_TTS_WORKFLOW_ID', 'tts-workflow'),
-      apiKey: getEnvVar('DIFY_API_KEY'),
+      apiKey: getEnvVar('DIFY_TTS_API_KEY'), // 可选的TTS应用密钥
       inputs: {
         text: '', // 待合成文本
         voice: 'zh-CN-female-1', // 声音选择
@@ -99,10 +99,15 @@ module.exports = {
   }
 };
 
-// 验证必需的配置
+// 验证必需的配置 (多应用架构)
 const requiredEnvVars = [
-  'DIFY_API_URL',
-  'DIFY_API_KEY'
+  'DIFY_API_URL'
+];
+
+const optionalEnvVars = [
+  'DIFY_TRANSCRIPTION_API_KEY',
+  'DIFY_ANALYSIS_API_KEY',
+  'DIFY_TRANSLATION_API_KEY'
 ];
 
 const validateConfig = () => {
@@ -117,7 +122,31 @@ const validateConfig = () => {
     return false;
   }
 
-  console.log('✅ Dify 配置验证通过');
+  // 检查可选的API密钥配置
+  const configuredApps = [];
+  const missingOptionalVars = [];
+
+  optionalEnvVars.forEach(varName => {
+    if (process.env[varName]) {
+      configuredApps.push(varName.replace('_API_KEY', ''));
+    } else {
+      missingOptionalVars.push(varName);
+    }
+  });
+
+  if (configuredApps.length > 0) {
+    console.log(`✅ Dify 配置验证通过 - 已配置应用: ${configuredApps.join(', ')}`);
+  } else {
+    console.log('✅ Dify 基础配置验证通过 - 建议配置各应用的API密钥');
+  }
+
+  if (missingOptionalVars.length > 0) {
+    console.log('💡 建议配置以下应用API密钥以启用完整功能:');
+    missingOptionalVars.forEach(varName => {
+      console.log(`- ${varName}`);
+    });
+  }
+
   return true;
 };
 
