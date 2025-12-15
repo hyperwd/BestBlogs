@@ -14,17 +14,6 @@ export interface TranscriptionRequest {
   includeTimestamps?: boolean
 }
 
-export interface TranscriptionResult {
-  text: string
-  segments?: Array<{
-    start: number
-    end: number
-    text: string
-  }>
-  language: string
-  duration: number
-}
-
 export interface TranslationRequest {
   text: string
   sourceLanguage?: string
@@ -131,8 +120,8 @@ class DifyClient {
 
     const inputs = {
       ...workflow.inputs,
-      text: request.text,
-      source_language: request.sourceLanguage || 'auto',
+      content: request.text,
+      language: request.sourceLanguage || 'auto',
       target_language: request.targetLanguage,
       translation_style: request.style || 'professional',
     }
@@ -152,21 +141,6 @@ class DifyClient {
       sentiment_analysis: request.sentimentAnalysis !== false,
       importance_scoring: request.importanceScoring !== false,
       breaking_news_detection: request.breakingNewsDetection !== false,
-    }
-
-    return this.makeRequest(workflow.workflowId, inputs, workflow.apiKey)
-  }
-
-  // 新闻摘要
-  async summarizeNews(articles: any[], summaryLength: string = 'medium', focusPoints: string[] = []): Promise<DifyResponse> {
-    const workflow = difyConfig.workflows.summarization
-
-    const inputs = {
-      ...workflow.inputs,
-      articles: articles,
-      summary_length: summaryLength,
-      focus_points: focusPoints,
-      language: 'zh-CN',
     }
 
     return this.makeRequest(workflow.workflowId, inputs, workflow.apiKey)
@@ -271,8 +245,6 @@ export const difyClient = new DifyClient()
 export const transcribeAudio = (request: TranscriptionRequest) => difyClient.transcribeAudio(request)
 export const translateText = (request: TranslationRequest) => difyClient.translateText(request)
 export const analyzeContent = (request: AnalysisRequest) => difyClient.analyzeContent(request)
-export const summarizeNews = (articles: any[], summaryLength?: string, focusPoints?: string[]) =>
-  difyClient.summarizeNews(articles, summaryLength, focusPoints)
 export const textToSpeech = (request: TTSRequest) => difyClient.textToSpeech(request)
 
 export default difyClient
