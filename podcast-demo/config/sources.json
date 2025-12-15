@@ -1,0 +1,143 @@
+{
+  "sources": [
+    {
+      "id": "cctv-news",
+      "name": "央视新闻",
+      "type": "tv",
+      "rssUrl": "https://rsshub.bestblogs.dev/cctv/news",
+      "streamUrl": "https://live.cctv.com/cctv-news.m3u8",
+      "language": "zh",
+      "country": "CN",
+      "isActive": true,
+      "category": "新闻",
+      "description": "中国中央电视台新闻频道官方直播",
+      "thumbnail": "https://example.com/cctv-news.jpg",
+      "tags": ["新闻", "国内", "官方"]
+    },
+    {
+      "id": "bbc-world",
+      "name": "BBC World Service",
+      "type": "radio",
+      "rssUrl": "https://rsshub.bestblogs.dev/bbc/news",
+      "streamUrl": "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service/live",
+      "language": "en",
+      "country": "UK",
+      "isActive": true,
+      "category": "国际新闻",
+      "description": "BBC国际广播服务，全球新闻与深度分析",
+      "thumbnail": "https://example.com/bbc-world.jpg",
+      "tags": ["国际", "英语", "新闻"]
+    },
+    {
+      "id": "voa-chinese",
+      "name": "美国之音中文",
+      "type": "radio",
+      "rssUrl": "https://rsshub.bestblogs.dev/voa/chinese",
+      "streamUrl": "https://voa-streaming.akamaized.net/voa/chi/ch/2470.mp3",
+      "language": "zh",
+      "country": "US",
+      "isActive": true,
+      "category": "国际新闻",
+      "description": "美国之音中文广播，国际新闻与时事分析",
+      "thumbnail": "https://example.com/voa-chinese.jpg",
+      "tags": ["国际", "中文", "美国"]
+    },
+    {
+      "id": "rfi-chinese",
+      "name": "法国国际广播电台",
+      "type": "radio",
+      "rssUrl": "https://rsshub.bestblogs.dev/rfi/chinese",
+      "streamUrl": "https://rfi-live.akamaized.net/rfi/chinois247mp3",
+      "language": "zh",
+      "country": "FR",
+      "isActive": true,
+      "category": "国际新闻",
+      "description": "法国国际广播电台中文节目，国际新闻多元视角",
+      "thumbnail": "https://example.com/rfi-chinese.jpg",
+      "tags": ["国际", "中文", "欧洲"]
+    },
+    {
+      "id": "cnbc",
+      "name": "CNBC Business News",
+      "type": "tv",
+      "rssUrl": "https://rsshub.bestblogs.dev/cnbc/news",
+      "streamUrl": "https://www.cnbc.com/live-tv/",
+      "language": "en",
+      "country": "US",
+      "isActive": true,
+      "category": "财经新闻",
+      "description": "CNBC财经新闻频道，全球市场分析与商业资讯",
+      "thumbnail": "https://example.com/cnbc.jpg",
+      "tags": ["财经", "商业", "英语"]
+    },
+    {
+      "id": "tech-podcast-daily",
+      "name": "Tech Podcast Daily",
+      "type": "podcast",
+      "rssUrl": "https://feeds.simplecast.com/tech-podcast-daily",
+      "streamUrl": null,
+      "language": "en",
+      "country": "US",
+      "isActive": true,
+      "category": "科技",
+      "description": "每日科技播客，最新技术趋势与创新讨论",
+      "thumbnail": "https://example.com/tech-podcast.jpg",
+      "tags": ["科技", "创新", "英语"]
+    },
+    {
+      "id": "ai-insights",
+      "name": "AI Insights 播客",
+      "type": "podcast",
+      "rssUrl": "https://anchor.fm/s/ai-insights/rss",
+      "streamUrl": null,
+      "language": "zh",
+      "country": "CN",
+      "isActive": true,
+      "category": "人工智能",
+      "description": "人工智能深度解析，行业动态与技术前沿",
+      "thumbnail": "https://example.com/ai-insights.jpg",
+      "tags": ["AI", "人工智能", "中文"]
+    },
+    {
+      "id": "bloomberg-radio",
+      "name": "Bloomberg Radio",
+      "type": "radio",
+      "rssUrl": "https://rsshub.bestblogs.dev/bloomberg/news",
+      "streamUrl": "https://live.bloomberg.com/media/i/stream/720/bloomberg_radio_live.rss",
+      "language": "en",
+      "country": "US",
+      "isActive": false,
+      "category": "财经新闻",
+      "description": "彭博电台，全球金融新闻与市场分析",
+      "thumbnail": "https://example.com/bloomberg.jpg",
+      "tags": ["财经", "金融", "英语"]
+    }
+  ],
+  "categories": [
+    {
+      "id": "news",
+      "name": "新闻资讯",
+      "description": "国内外新闻媒体源"
+    },
+    {
+      "id": "international",
+      "name": "国际新闻",
+      "description": "国际新闻广播媒体"
+    },
+    {
+      "id": "finance",
+      "name": "财经新闻",
+      "description": "财经金融相关媒体"
+    },
+    {
+      "id": "tech",
+      "name": "科技",
+      "description": "科技类播客与节目"
+    },
+    {
+      "id": "ai",
+      "name": "人工智能",
+      "description": "AI相关内容"
+    }
+  ]
+}
